@@ -6,25 +6,25 @@
 /*   By: smikayel <smikayel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 12:44:54 by smikayel          #+#    #+#             */
-/*   Updated: 2022/03/15 20:07:35 by smikayel         ###   ########.fr       */
+/*   Updated: 2022/03/18 15:28:38 by smikayel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *str, int c)
 {
-	if (!*s)
-		return (NULL);
-	while (*s != '\0')
+	unsigned char	tar;
+
+	if (!c)
+		return ((char *)str + ft_strlen(str));
+	tar = c;
+	while (*str)
 	{
-		if (*s == (char)c)
-		{
-			return ((char *)s);
-		}
-		s++;
+		if (*str == tar)
+			return ((char *)str);
+		else if (!*str++)
+			return (0);
 	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (NULL);
+	return (0);
 }
