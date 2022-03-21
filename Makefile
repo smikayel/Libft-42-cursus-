@@ -6,76 +6,47 @@
 #    By: smikayel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 11:32:33 by smikayel          #+#    #+#              #
-#    Updated: 2022/03/18 12:06:42 by smikayel         ###   ########.fr        #
+#    Updated: 2022/03/21 16:04:35 by smikayel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CC = gcc
+CC	=	gcc
+
 CFLAGS = -Wall -Wextra -Werror
-AR = ar rcs
+
+ALL_SRCS = $(wildcard *.c)
+
+BONUS_SRCS = $(wildcard ft_lst*.c)
+
+SRCS = $(filter-out $(BONUS_SRCS), $(ALL_SRCS))
+
+OBJS = $(patsubst %.c, %.o, $(SRCS))
+
+BONUS_OBJS = $(patsubst %.c, %.o, $(BONUS_SRCS))
+
 RM = rm -f
 
-FILES = ft_memset \
-		ft_bzero \
-		ft_memcpy \
-		ft_memmove \
-		ft_memchr \
-		ft_memcmp \
-		ft_strlen \
-		ft_strlcpy \
-		ft_strlcat \
-		ft_strchr \
-		ft_strrchr \
-		ft_strnstr \
-		ft_strncmp \
-		ft_atoi \
-		ft_isalpha \
-		ft_isdigit \
-		ft_isalnum \
-		ft_isascii \
-		ft_isprint \
-		ft_toupper \
-		ft_tolower \
-		ft_calloc \
-		ft_strdup \
-		ft_strtrim \
-		ft_split \
-		ft_substr \
-		ft_strjoin \
-		ft_itoa \
-		ft_strmapi \
-		ft_putchar_fd \
-		ft_putstr_fd \
-		ft_putendl_fd \
-		ft_putnbr_fd \
-		ft_striteri
+AR = ar rcs
 
-
-SRCS_DIR = ./
-SRCS = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES)))
-
-OBJS_DIR = ./
-OBJS = $(addprefix $(OBJS_DIR), $(addsuffix .o, $(FILES)))
-
-
-.c.o: $(SRCS)
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(NAME): $(OBJS)
-	$(AR) $@ $^
-
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
 
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
+
+bonus: $(NAME) $(BONUS_OBJS)
+	$(AR) $(NAME) $(BONUS_OBJS)
+
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
 	$(RM) $(NAME)
 
-re: clean all
+re:	fclean all
 
-.PHONY: all clean fclean re
-
+.PHONY: all clean fclean re bonus
