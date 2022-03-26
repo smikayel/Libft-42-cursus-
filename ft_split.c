@@ -3,84 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smikayel <smikayel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smikayel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/12 18:26:14 by smikayel          #+#    #+#             */
-/*   Updated: 2022/03/17 20:48:25 by smikayel         ###   ########.fr       */
+/*   Created: 2022/03/22 16:36:14 by smikayel          #+#    #+#             */
+/*   Updated: 2022/03/25 16:24:12 by smikayel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	counting_word(char const *s, char c)
+static size_t	getwordcount(char const *s, char c)
 {
-	int	index;
-	int	count;
+	size_t	count;
+	size_t	i;
+	size_t	len;
 
-	count = 0;
-	index = 0;
-	if (!s && !c)
-		return (-1);
-	while (s[index] != '\0')
+	i = -1;
+	count = 1;
+	len = ft_strlen(s);
+	while (s[++i] && s[i] == c)
+		;
+	while (s[--len] && s[len] == c && i < len)
+		;
+	if (i == ft_strlen(s))
+		return (0);
+	while (s[i] && i < len)
 	{
-		if (s[index] == c && index != 0 && s[index + 1] != c)
+		if (s[i] == c && s[i - 1] != c)
 			count++;
-		index++;
+		i++;
 	}
-	if (s[index - 1] != c)
-		count += 1;
 	return (count);
 }
 
-static char	**spl(char **sp_list, char const *s, char c)
+static char	*fillword(const char *s, size_t startindex, size_t len)
 {
-	int		index;
-	int		len;
-	int		j;
+	char	*word;
+	size_t	i;
 
-	index = 0;
-	j = 0;
-	j = 0;
-	while (s[index] != '\0')
-	{
-		if (s[index] != c)
-		{
-			len = 0;
-			while (s[index] != '\0' && s[index] != c)
-			{
-				len++;
-				index++;
-			}
-			sp_list[j] = ft_substr(s, index - len, len);
-			j++;
-		}
-		while (s[index] == c)
-			index++;
-	}
-	sp_list[j] = NULL;
-	return (sp_list);
+	i = -1;
+	word = malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	while (++i < len)
+		word[i] = s[startindex + i];
+	word[i] = 0;
+	return (word);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**sp_list;
+	size_t	startindex;
+	size_t	endindex;
+	size_t	index;
+	size_t	wordcount;
+	char	**result;
 
-	sp_list = (char **)malloc((counting_word(s, c) + 1) * sizeof(char *));
-	if (!sp_list)
+	startindex = 0;
+	index = -1;
+	wordcount = getwordcount(s, c);
+	result = malloc(sizeof(char *) * (wordcount + 1));
+	if (!s || !result)
 		return (NULL);
-	if (s[0] == 0 && c == 0)
+	while (++index < wordcount)
 	{
-		sp_list[0] = NULL;
-		return (sp_list);
+		while (s[startindex] && s[startindex] == c)
+			startindex++;
+		endindex = startindex;
+		while (s[endindex] && s[endindex] != c)
+			endindex++;
+		result[index] = fillword(s, startindex, endindex - startindex);
+		startindex = endindex;
 	}
-	if (c != '\0')
-	{
-		sp_list = spl(sp_list, s, c);
-	}
-	else
-	{
-		sp_list[0] = ft_strdup(s);
-		sp_list[1] = NULL;
-	}
-	return (sp_list);
+	result[index] = 0;
+	return (result);
 }

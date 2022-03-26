@@ -6,13 +6,13 @@
 #    By: smikayel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 11:32:33 by smikayel          #+#    #+#              #
-#    Updated: 2022/03/21 16:04:35 by smikayel         ###   ########.fr        #
+#    Updated: 2022/03/25 16:25:53 by smikayel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CC	=	gcc
+CC	=	cc
 
 CFLAGS = -Wall -Wextra -Werror
 
